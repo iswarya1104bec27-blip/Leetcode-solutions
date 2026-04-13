@@ -1,0 +1,33 @@
+#include <vector>
+#include <string>
+#include <algorithm>
+
+using namespace std;
+
+class Solution {
+public:
+    string longestCommonPrefix(vector<string>& strs) {
+        // If the input is empty, return an empty string
+        if (strs.empty()) return "";
+        
+        // Sort the strings lexicographically
+        // This puts the most different strings at the ends
+        sort(strs.begin(), strs.end());
+        
+        string first = strs[0];
+        string last = strs[strs.size() - 1];
+        string result = "";
+        
+        // Only compare the first and the last strings
+        for (int i = 0; i < first.length(); i++) {
+            if (first[i] == last[i]) {
+                result += first[i];
+            } else {
+                // As soon as they differ, we've found the longest prefix
+                break;
+            }
+        }
+        
+        return result;
+    }
+};
