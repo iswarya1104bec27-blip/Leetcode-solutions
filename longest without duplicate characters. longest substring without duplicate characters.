@@ -1,0 +1,29 @@
+#include <string>
+#include <vector>
+#include <algorithm>
+
+using namespace std;
+
+class Solution {
+public:
+    int lengthOfLongestSubstring(string s) {
+        // Use a vector of size 128 to cover all ASCII characters
+        // Stores the last seen index + 1 of each character
+        vector<int> charIndex(128, 0);
+        int maxLen = 0;
+        int left = 0;
+
+        for (int right = 0; right < s.length(); right++) {
+            // If the character was seen within the current window, move left
+            left = max(left, charIndex[s[right]]);
+
+            // Update max length found so far
+            maxLen = max(maxLen, right - left + 1);
+
+            // Store the next available index for this character
+            charIndex[s[right]] = right + 1;
+        }
+
+        return maxLen;
+    }
+};
