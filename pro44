@@ -1,0 +1,43 @@
+#include <string>
+
+using namespace std;
+
+class Solution {
+public:
+    bool isMatch(string s, string p) {
+        int s_ptr = 0, p_ptr = 0;
+        int s_star = -1, p_star = -1;
+        int n = s.length(), m = p.length();
+
+        while (s_ptr < n) {
+            // 1. Characters match or '?'
+            if (p_ptr < m && (p[p_ptr] == '?' || p[p_ptr] == s[s_ptr])) {
+                s_ptr++;
+                p_ptr++;
+            }
+            // 2. Found a '*', record position and try matching 0 chars
+            else if (p_ptr < m && p[p_ptr] == '*') {
+                p_star = p_ptr;
+                s_star = s_ptr;
+                p_ptr++;
+            }
+            // 3. Current mismatch, but we had a previous '*'
+            else if (p_star != -1) {
+                p_ptr = p_star + 1; // Reset pattern to after the '*'
+                s_star++;           // Increment string pointer to match more chars
+                s_ptr = s_star;     // Start matching from the new string position
+            }
+            // 4. Mismatch and no '*' to fall back on
+            else {
+                return false;
+            }
+        }
+
+        // Check if remaining pattern characters are all '*'
+        while (p_ptr < m && p[p_ptr] == '*') {
+            p_ptr++;
+        }
+
+        return p_ptr == m;
+    }
+};
