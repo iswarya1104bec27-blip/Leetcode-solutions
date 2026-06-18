@@ -1,0 +1,55 @@
+#include <vector>
+#include <string>
+#include <unordered_map>
+
+using namespace std;
+
+class Solution {
+public:
+    vector<int> findSubstring(string s, vector<string>& words) {
+        vector<int> result;
+        if (s.empty() || words.empty()) return result;
+
+        int n = s.length();
+        int wordCount = words.size();
+        int wordLen = words[0].length();
+        int totalLen = wordCount * wordLen;
+
+        unordered_map<string, int> wordMap;
+        for (const string& w : words) wordMap[w]++;
+
+        // Check each possible offset (0 to wordLen - 1)
+        for (int i = 0; i < wordLen; i++) {
+            int left = i, right = i, count = 0;
+            unordered_map<string, int> seen;
+
+            while (right + wordLen <= n) {
+                string word = s.substr(right, wordLen);
+                right += wordLen;
+
+                if (wordMap.count(word)) {
+                    seen[word]++;
+                    count++;
+
+                    // If we have more of 'word' than needed, slide left
+                    while (seen[word] > wordMap[word]) {
+                        string leftWord = s.substr(left, wordLen);
+                        seen[leftWord]--;
+                        count--;
+                        left += wordLen;
+                    }
+
+                    if (count == wordCount) {
+                        result.push_back(left);
+                    }
+                } else {
+                    // Word not in dictionary, reset window
+                    seen.clear();
+                    count = 0;
+                    left = right;
+                }
+            }
+        }
+        return result;
+    }
+};
