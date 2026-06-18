@@ -1,0 +1,25 @@
+#include <vector>
+#include <algorithm>
+
+using namespace std;
+
+class Solution {
+public:
+    bool canJump(vector<int>& nums) {
+        int farthest = 0;
+        int n = nums.size();
+
+        for (int i = 0; i < n; i++) {
+            // If the current index is unreachable, we're done
+            if (i > farthest) return false;
+
+            // Update how far we can possibly jump
+            farthest = max(farthest, i + nums[i]);
+
+            // Optimization: If we can reach the end, stop early
+            if (farthest >= n - 1) return true;
+        }
+
+        return true;
+    }
+};
