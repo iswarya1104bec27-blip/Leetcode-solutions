@@ -1,0 +1,19 @@
+#include <vector>
+
+class Solution {
+public:
+    int uniquePaths(int m, int n) {
+        // Use a 1D vector to save space, initialized to 1
+        // (Base case: there's only 1 way to reach any cell in the first row/column)
+        std::vector<int> dp(n, 1);
+
+        for (int i = 1; i < m; ++i) {
+            for (int j = 1; j < n; ++j) {
+                // Current cell = ways from top (dp[j]) + ways from left (dp[j-1])
+                dp[j] += dp[j - 1];
+            }
+        }
+
+        return dp[n - 1];
+    }
+};
