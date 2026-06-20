@@ -1,0 +1,39 @@
+#include <vector>
+#include <string>
+
+class Solution {
+public:
+    void backtrack(std::string& s, int start, int part, std::string current, std::vector<std::string>& result) {
+        // Base Case: If we have 4 parts and used the whole string
+        if (part == 4) {
+            if (start == s.length()) {
+                result.push_back(current.substr(0, current.length() - 1)); // Remove trailing dot
+            }
+            return;
+        }
+
+        // Optimization: Not enough characters left or too many characters left
+        for (int len = 1; len <= 3; len++) {
+            if (start + len > s.length()) break;
+
+            std::string segment = s.substr(start, len);
+            int val = std::stoi(segment);
+
+            // Validation:
+            // 1. Value must be <= 255
+            // 2. No leading zeros (length > 1 and starts with '0' is invalid)
+            if (val > 255 || (len > 1 && s[start] == '0')) continue;
+
+            backtrack(s, start + len, part + 1, current + segment + ".", result);
+        }
+    }
+
+    std::vector<std::string> restoreIpAddresses(std::string s) {
+        std::vector<std::string> result;
+        // Optimization: IP addresses must be between 4 and 12 characters
+        if (s.length() < 4 || s.length() > 12) return result;
+        
+        backtrack(s, 0, 0, "", result);
+        return result;
+    }
+};
