@@ -1,0 +1,24 @@
+#include <climits>
+
+class Solution {
+public:
+    bool isValidBST(TreeNode* root) {
+        // Use long long to handle edge cases where node value is INT_MIN or INT_MAX
+        return validate(root, LLONG_MIN, LLONG_MAX);
+    }
+
+private:
+    bool validate(TreeNode* node, long long minVal, long long maxVal) {
+        if (!node) return true;
+
+        // Node value must be strictly between minVal and maxVal
+        if (node->val <= minVal || node->val >= maxVal) {
+            return false;
+        }
+
+        // Left child: update max bound to current node value
+        // Right child: update min bound to current node value
+        return validate(node->left, minVal, node->val) && 
+               validate(node->right, node->val, maxVal);
+    }
+};
