@@ -1,0 +1,23 @@
+class Solution {
+public:
+    ListNode* deleteDuplicates(ListNode* head) {
+        if (!head) return nullptr;
+
+        ListNode* curr = head;
+
+        // Traverse the list until the second to last node
+        while (curr && curr->next) {
+            if (curr->val == curr->next->val) {
+                // Duplicate found: link current to the node after the duplicate
+                ListNode* temp = curr->next;
+                curr->next = curr->next->next;
+                delete temp; // Free memory if required by environment
+            } else {
+                // No duplicate: move the pointer forward
+                curr = curr->next;
+            }
+        }
+
+        return head;
+    }
+};
