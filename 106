@@ -1,0 +1,40 @@
+#include <vector>
+#include <unordered_map>
+
+class Solution {
+    std::unordered_map<int, int> inMap;
+    int postIdx;
+
+public:
+    TreeNode* buildTree(std::vector<int>& inorder, std::vector<int>& postorder) {
+        int n = inorder.size();
+        postIdx = n - 1; // Start from the last element of postorder
+
+        // Map inorder values to indices for O(1) lookup
+        for (int i = 0; i < n; i++) {
+            inMap[inorder[i]] = i;
+        }
+
+        return build(postorder, 0, n - 1);
+    }
+
+private:
+    TreeNode* build(std::vector<int>& postorder, int left, int right) {
+        if (left > right) return nullptr;
+
+        // Pick current root from postorder (Right -> Left traversal)
+        int rootVal = postorder[postIdx--];
+        TreeNode* root = new TreeNode(rootVal);
+
+        // Find the index of this root in inorder array
+        int mid = inMap[rootVal];
+
+        // IMPORTANT: Build RIGHT subtree before LEFT 
+        // because postorder is Left -> Right -> Root
+        // Walking backward gives Root -> Right -> Left
+        root->right = build(postorder, mid + 1, right);
+        root->left = build(postorder, left, mid - 1);
+
+        return root;
+    }
+};
