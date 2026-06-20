@@ -1,0 +1,16 @@
+#include <algorithm>
+
+class Solution {
+public:
+    int maxDepth(TreeNode* root) {
+        // Base case: if the tree is empty, depth is 0
+        if (!root) return 0;
+
+        // Recursively find the depth of each subtree
+        int leftDepth = maxDepth(root->left);
+        int rightDepth = maxDepth(root->right);
+
+        // Max depth is 1 (current node) + the larger of the two subtrees
+        return 1 + std::max(leftDepth, rightDepth);
+    }
+};
