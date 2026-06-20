@@ -1,0 +1,17 @@
+#include <vector>
+
+class Solution {
+public:
+    std::vector<int> grayCode(int n) {
+        std::vector<int> result;
+        // Total number of elements in an n-bit Gray code sequence is 2^n
+        int totalElements = 1 << n;
+        
+        for (int i = 0; i < totalElements; ++i) {
+            // Formula to convert binary to Gray code: G(i) = i XOR (i >> 1)
+            result.push_back(i ^ (i >> 1));
+        }
+        
+        return result;
+    }
+};
