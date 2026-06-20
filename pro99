@@ -1,0 +1,44 @@
+#include <algorithm>
+
+class Solution {
+public:
+    void recoverTree(TreeNode* root) {
+        TreeNode *first = nullptr, *second = nullptr, *prev = nullptr;
+        TreeNode *curr = root, *temp = nullptr;
+
+        while (curr) {
+            if (!curr->left) {
+                // Process the current node
+                if (prev && prev->val > curr->val) {
+                    if (!first) first = prev;
+                    second = curr;
+                }
+                prev = curr;
+                curr = curr->right;
+            } else {
+                // Find inorder predecessor
+                temp = curr->left;
+                while (temp->right && temp->right != curr) {
+                    temp = temp->right;
+                }
+
+                if (!temp->right) {
+                    // Create thread and move to left child
+                    temp->right = curr;
+                    curr = curr->left;
+                } else {
+                    // Revert thread and process current node
+                    temp->right = nullptr;
+                    if (prev && prev->val > curr->val) {
+                        if (!first) first = prev;
+                        second = curr;
+                    }
+                    prev = curr;
+                    curr = curr->right;
+                }
+            }
+        }
+        // Swap the values of the two mismatched nodes
+        if (first && second) std::swap(first->val, second->val);
+    }
+};
