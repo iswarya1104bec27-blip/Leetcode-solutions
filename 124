@@ -1,0 +1,32 @@
+#include <algorithm>
+#include <climits>
+
+class Solution {
+    int maxPath = INT_MIN;
+
+public:
+    int maxPathSum(TreeNode* root) {
+        calculateGain(root);
+        return maxPath;
+    }
+
+private:
+    int calculateGain(TreeNode* node) {
+        if (!node) return 0;
+
+        // 1. Recursively get max gain from subtrees. 
+        // Ignore negative gains by using max(..., 0).
+        int leftGain = std::max(calculateGain(node->left), 0);
+        int rightGain = std::max(calculateGain(node->right), 0);
+
+        // 2. Calculate sum of the path "arching" through the current node
+        int currentPathSum = node->val + leftGain + rightGain;
+
+        // 3. Update global maximum if the current arch is better
+        maxPath = std::max(maxPath, currentPathSum);
+
+        // 4. Return the max gain this node provides to its parent
+        // (Must choose only ONE branch to maintain a valid path)
+        return node->val + std::max(leftGain, rightGain);
+    }
+};
