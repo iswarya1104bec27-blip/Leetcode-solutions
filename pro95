@@ -1,0 +1,39 @@
+#include <vector>
+
+class Solution {
+public:
+    std::vector<TreeNode*> generateTrees(int n) {
+        if (n == 0) return {};
+        return buildTrees(1, n);
+    }
+
+private:
+    std::vector<TreeNode*> buildTrees(int start, int end) {
+        std::vector<TreeNode*> allTrees;
+
+        // Base case: if start > end, no nodes to form a tree
+        if (start > end) {
+            allTrees.push_back(nullptr);
+            return allTrees;
+        }
+
+        // Pick each number as the root
+        for (int i = start; i <= end; i++) {
+            // Generate all possible left and right subtrees
+            std::vector<TreeNode*> leftSubtrees = buildTrees(start, i - 1);
+            std::vector<TreeNode*> rightSubtrees = buildTrees(i + 1, end);
+
+            // Combine each left subtree with each right subtree under root i
+            for (TreeNode* left : leftSubtrees) {
+                for (TreeNode* right : rightSubtrees) {
+                    TreeNode* root = new TreeNode(i);
+                    root->left = left;
+                    root->right = right;
+                    allTrees.push_back(root);
+                }
+            }
+        }
+
+        return allTrees;
+    }
+};
