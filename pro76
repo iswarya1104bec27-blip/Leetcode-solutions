@@ -1,0 +1,42 @@
+#include <string>
+#include <vector>
+#include <unordered_map>
+#include <climits>
+
+class Solution {
+public:
+    std::string minWindow(std::string s, std::string t) {
+        if (s.empty() || t.empty()) return "";
+
+        // Frequency map for characters in t
+        std::vector<int> map(128, 0);
+        for (char c : t) map[c]++;
+
+        int counter = t.size(); // Total characters needed
+        int begin = 0, end = 0;
+        int d = INT_MAX; // Window length
+        int head = 0;    // Starting index of result
+
+        while (end < s.size()) {
+            // If character at 'end' is in t, decrease counter
+            if (map[s[end++]]-- > 0) {
+                counter--;
+            }
+
+            // When window is valid (contains all chars of t)
+            while (counter == 0) {
+                // Update minimum length
+                if (end - begin < d) {
+                    d = end - (head = begin);
+                }
+                
+                // If character at 'begin' was part of t, increase counter
+                if (map[s[begin++]]++ == 0) {
+                    counter++;
+                }
+            }
+        }
+
+        return d == INT_MAX ? "" : s.substr(head, d);
+    }
+};
