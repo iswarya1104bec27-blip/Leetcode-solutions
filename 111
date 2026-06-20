@@ -1,0 +1,20 @@
+#include <algorithm>
+
+class Solution {
+public:
+    int minDepth(TreeNode* root) {
+        if (!root) return 0;
+
+        // If it's a leaf node, depth is 1
+        if (!root->left && !root->right) return 1;
+
+        // If left child is NULL, we must take the path to the right
+        if (!root->left) return 1 + minDepth(root->right);
+
+        // If right child is NULL, we must take the path to the left
+        if (!root->right) return 1 + minDepth(root->left);
+
+        // If both exist, take the minimum of the two paths
+        return 1 + std::min(minDepth(root->left), minDepth(root->right));
+    }
+};
