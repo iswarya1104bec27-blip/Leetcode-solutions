@@ -1,0 +1,23 @@
+#include <vector>
+#include <algorithm>
+
+class Solution {
+public:
+    int minimumTotal(std::vector<std::vector<int>>& triangle) {
+        int n = triangle.size();
+        // Use the last row of the triangle as our initial DP state
+        std::vector<int> dp = triangle.back();
+
+        // Move from the second-to-last row up to the top
+        for (int i = n - 2; i >= 0; i--) {
+            for (int j = 0; j <= i; j++) {
+                // Each cell value is updated to: 
+                // Current value + min of the two possible children below it
+                dp[j] = triangle[i][j] + std::min(dp[j], dp[j + 1]);
+            }
+        }
+
+        // The answer will be at the very first element
+        return dp[0];
+    }
+};
