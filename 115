@@ -1,0 +1,32 @@
+#include <vector>
+#include <string>
+
+class Solution {
+public:
+    int numDistinct(std::string s, std::string t) {
+        int m = s.length();
+        int n = t.length();
+
+        // dp[j] stores the number of subsequences of t[0...j-1]
+        // Using unsigned long to prevent overflow during intermediate steps
+        std::vector<unsigned long> dp(n + 1, 0);
+
+        // Base case: an empty t is a subsequence of any s in exactly 1 way
+        dp[0] = 1;
+
+        for (int i = 1; i <= m; i++) {
+            // Iterate backwards to use values from the previous 'i' iteration
+            for (int j = n; j >= 1; j--) {
+                if (s[i - 1] == t[j - 1]) {
+                    // Two choices: 
+                    // 1. Use s[i-1] to match t[j-1] -> dp[j-1]
+                    // 2. Ignore s[i-1] even if it matches -> dp[j]
+                    dp[j] += dp[j - 1];
+                }
+                // If s[i-1] != t[j-1], we must ignore s[i-1], so dp[j] remains same
+            }
+        }
+
+        return (int)dp[n];
+    }
+};
