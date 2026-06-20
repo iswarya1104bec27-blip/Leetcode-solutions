@@ -1,0 +1,32 @@
+#include <vector>
+#include <stack>
+#include <algorithm>
+
+class Solution {
+public:
+    int largestRectangleArea(std::vector<int>& heights) {
+        std::stack<int> s;
+        int maxArea = 0;
+        int n = heights.size();
+
+        for (int i = 0; i <= n; i++) {
+            // Use 0 as a sentinel value for the end of the histogram
+            int h = (i == n) ? 0 : heights[i];
+
+            // If current height is less than stack top, we found a right boundary
+            while (!s.empty() && h < heights[s.top()]) {
+                int height = heights[s.top()];
+                s.pop();
+                
+                // Calculate width: if stack is empty, width is the whole range i
+                // Otherwise, width is from the new stack top to i
+                int width = s.empty() ? i : i - s.top() - 1;
+                
+                maxArea = std::max(maxArea, height * width);
+            }
+            s.push(i);
+        }
+
+        return maxArea;
+    }
+};
