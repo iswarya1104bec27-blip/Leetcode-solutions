@@ -1,0 +1,19 @@
+#include <vector>
+
+class Solution {
+public:
+    std::vector<int> getRow(int rowIndex) {
+        // Initialize the row with size (rowIndex + 1) and all values as 1
+        std::vector<int> row(rowIndex + 1, 1);
+
+        for (int i = 1; i < rowIndex; i++) {
+            // Update the row backwards to avoid using already-updated values
+            // We skip the first and last elements as they are always 1
+            for (int j = i; j >= 1; j--) {
+                row[j] = row[j] + row[j - 1];
+            }
+        }
+
+        return row;
+    }
+};
